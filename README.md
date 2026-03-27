@@ -1,12 +1,14 @@
+
 # BMSCE Website
 
-A modern, multi-page website for **B.M.S. College of Engineering (BMSCE)** with:
+A modern, multi-page website for **B.M.S. College of Engineering (BMSCE)** featuring:
 
-- modular, component-based frontend pages
-- premium placements and department detail experiences
-- virtual campus tour page
-- floating AI assistant chat widget
-- contact form with MongoDB storage and email notifications
+- Modular, component-based frontend pages
+- Premium placements and department detail experiences
+- Virtual campus tour page
+- **Explore Programs**: Instantly view all BMSCE programs and typical cutoffs
+- **AI Assistant (RAG-based)**: Floating, always-visible chat powered by Groq Llama-3, with context-aware answers and future-ready RAG (Retrieval-Augmented Generation) for BMSCE info
+- **Contact system**: Modern form with validation, MongoDB storage, admin notification, and user auto-reply
 
 ---
 
@@ -24,24 +26,23 @@ A modern, multi-page website for **B.M.S. College of Engineering (BMSCE)** with:
 - Nodemailer (Gmail SMTP)
 - CORS + dotenv
 
+
 ### AI Integration
 - Groq Chat Completions API (`llama-3.3-70b-versatile`)
+- Retrieval-Augmented Generation (RAG) for context-rich answers (future-ready)
 
 ---
 
+
 ## Features
 
-- **Reusable layout components** (`navbar`, `footer`, `hero`, sections)
-- **Rich home page** with section mounts and dynamic component loading
-- **Dedicated placements page** with leadership details and statistics sections
-- **Department details page** with expanded department data sets
-- **Virtual tour page** for campus exploration UI
-- **Floating chatbot assistant** available across pages
-- **Contact page** with:
-  - frontend validation
-  - backend persistence to MongoDB
-  - admin notification email
-  - automated acknowledgement email to user
+- **Explore Programs**: One-click access to all BMSCE undergraduate and postgraduate programs, with typical KCET/COMEDK cutoffs, in a beautiful, filterable layout.
+- **AI Assistant (RAG-based)**: Floating, bold, and always-visible chat button on every page. Powered by Groq Llama-3, answers BMSCE-specific queries, admissions, placements, and more. Future-ready for RAG upgrades.
+- **Contact System**: Modern contact form with real-time validation, MongoDB storage, admin notification email, and user auto-reply.
+- **Premium Placements Page**: Leadership messages, stats, and interactive charts.
+- **Department Details**: Rich, mapped content for every department.
+- **Virtual Tour**: Full-screen, interactive campus map experience.
+- **Reusable Layout Components**: Navbar, footer, hero, and more, loaded dynamically for maintainability.
 
 ---
 
@@ -159,6 +160,7 @@ Saves record to MongoDB and sends:
 
 ---
 
+
 ## Deployment Guide
 
 ## Backend (Render)
@@ -183,6 +185,7 @@ Saves record to MongoDB and sends:
 3. No build command required for this static setup.
 4. Deploy.
 
+
 ### Current API base behavior
 
 In frontend scripts (`assets/js/chatbot.js`, `assets/js/contact.js`):
@@ -192,6 +195,7 @@ In frontend scripts (`assets/js/chatbot.js`, `assets/js/contact.js`):
 If your Render URL changes, update those files and redeploy Vercel.
 
 ---
+
 
 ## Troubleshooting
 
@@ -214,6 +218,7 @@ If your Render URL changes, update those files and redeploy Vercel.
 - check MongoDB network access and user permissions
 
 ---
+
 
 ## Security Notes
 

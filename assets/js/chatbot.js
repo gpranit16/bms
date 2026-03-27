@@ -4,21 +4,31 @@
     const chatApiUrl = `${apiBase}/api/chat`;
 
     const style = document.createElement('style');
+
     style.textContent = `
         .bms-chat-fab {
             position: fixed;
-            right: 20px;
-            bottom: 24px;
-            width: 58px;
-            height: 58px;
+            right: 24px;
+            bottom: 32px;
+            width: 74px;
+            height: 74px;
             border-radius: 50%;
-            border: 0;
-            background: linear-gradient(145deg, #1a2b5e, #0f1f49);
-            color: #c9a84c;
-            font-size: 24px;
-            box-shadow: 0 12px 24px rgba(15, 31, 73, 0.35);
+            border: 3px solid #c9a84c;
+            background: linear-gradient(145deg, #1a2b5e 80%, #0f1f49 100%);
+            color: #fffbe6;
+            font-size: 34px;
+            font-weight: 900;
+            box-shadow: 0 16px 32px rgba(15, 31, 73, 0.45), 0 0 0 6px #c9a84c33;
             cursor: pointer;
             z-index: 1200;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .bms-chat-fab:hover, .bms-chat-fab:focus {
+            background: linear-gradient(145deg, #c9a84c 80%, #ffe082 100%);
+            color: #1a2b5e;
+            border-color: #1a2b5e;
+            transform: scale(1.08) rotate(-6deg);
+            box-shadow: 0 24px 48px rgba(26, 43, 94, 0.55), 0 0 0 10px #c9a84c55;
         }
 
         .bms-chat-panel {
@@ -148,9 +158,12 @@
 
     const fab = document.createElement('button');
     fab.className = 'bms-chat-fab';
-    fab.title = 'BMSCE Assistant';
-    fab.setAttribute('aria-label', 'Open BMSCE Assistant');
-    fab.innerHTML = '💬';
+    fab.title = 'BMSCE AI Assistant';
+    fab.setAttribute('aria-label', 'Open BMSCE AI Assistant');
+    fab.innerHTML = `
+        <span style="font-size:38px;line-height:1;display:block;">🤖</span>
+        <span style="display:block;font-size:11px;font-weight:700;letter-spacing:0.5px;margin-top:0px;color:#ffe082;text-shadow:0 1px 2px #1a2b5e;">AI Assistant</span>
+    `;
 
     const panel = document.createElement('section');
     panel.className = 'bms-chat-panel';
