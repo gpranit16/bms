@@ -1,6 +1,6 @@
 (() => {
     const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    const apiBase = isLocalhost && window.location.port !== '5601' ? 'http://127.0.0.1:5601' : '';
+    const apiBase = isLocalhost ? 'http://127.0.0.1:5601' : 'https://bms-s9o7.onrender.com';
     const chatApiUrl = `${apiBase}/api/chat`;
 
     const style = document.createElement('style');
