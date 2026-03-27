@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMSCE — Real Virtual Tour</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #0d1b3e; color: #fff; height: 100vh; overflow: hidden; }
+
+#map-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  z-index: 1;
+  transition: opacity 0.5s;
+}
+#map-frame.loading { opacity: 0.3; }
+
+/* HEADER */
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: linear-gradient(180deg, rgba(13,27,62,0.95) 0%, rgba(13,27,62,0.6) 70%, transparent 100%);
+  pointer-events: none;
+}
+.h-logo-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #c9a84c;
+}
+.h-logo-sub { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; }
+.h-center { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; }
+.back-btn {
+  pointer-events: all;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid #c9a84c;
+  color: #c9a84c;
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.back-btn:hover { background: #c9a84c; color: #1a2b5e; }
+
+/* INFO CARD */
+#info-card {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 100;
+  background: rgba(13,27,62,0.9);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 14px;
+  padding: 18px 20px;
+  width: 230px;
+  backdrop-filter: blur(14px);
+  transition: all 0.35s ease;
+}
+.ic-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #c9a84c; margin-bottom: 5px; }
+.ic-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 6px; line-height: 1.3; }
+.ic-desc { font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 10px; }
+.ic-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.ic-tag { font-size: 10px; padding: 3px 9px; border-radius: 10px; background: rgba(201,168,76,0.12); color: #c9a84c; border: 1px solid rgba(201,168,76,0.2); }
+
+/* LOADER */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(13,27,62,0.7);
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+#loader.hidden { opacity: 0; }
+.spin {
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(201,168,76,0.2);
+  border-top-color: #c9a84c;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loader p { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+/* LOCATION STRIP */
+#loc-strip {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: linear-gradient(0deg, rgba(13,27,62,0.97) 0%, rgba(13,27,62,0.8) 60%, transparent 100%);
+  padding: 30px 24px 20px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#loc-strip::-webkit-scrollbar { display: none; }
+
+.loc-btn {
+  flex-shrink: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.75);
+  padding: 10px 16px;
+  border-radius: 28px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.22s;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+.loc-btn:hover { background: rgba(201,168,76,0.18); border-color: #c9a84c; color: #fff; box-shadow: 0 0 18px rgba(201, 168, 76, 0.2); }
+.loc-btn.active { background: #c9a84c; border-color: #c9a84c; color: #1a2b5e; font-weight: 600; }
+
+/* PROGRESS */
+#dots {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.dot.active { background: #c9a84c; width: 20px; border-radius: 3px; }
+
+/* NOTE BANNER */
+#note {
+  position: fixed;
+  bottom: 95px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(13,27,62,0.85);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.8s;
+}
+#note.hidden { opacity: 0; }
+
+@media (max-width: 768px) {
+  #info-card { right: 10px; top: 75px; width: 180px; padding: 12px 14px; }
+  .ic-name { font-size: 14px; }
+  #header { padding: 12px 16px; }
+  .h-logo-name { font-size: 17px; }
+  .h-center { display: none; }
+}
+</style>
+</head>
+<body>
+
+<iframe
+  id="map-frame"
+  src="https://www.google.com/maps/embed?pb=!4v1710000000001!6m8!1m7!1sCAoSLEFGMVFpcE9oNzRfTVVBX3JsWEtqNERIMGY0eWJBTWVNWEVhU2ZyMlBxRVJh!2m2!1d12.9408!2d77.5634!3f180!4f0!5f0.7820865974627469"
+  allowfullscreen
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+</iframe>
+
+<div id="loader">
+  <div class="spin"></div>
+  <p>Loading Google Street View...</p>
+</div>
+
+<div id="header">
+  <div>
+    <div class="h-logo-name">BMSCE</div>
+    <div class="h-logo-sub">Est. 1946 · Bengaluru</div>
+  </div>
+  <div class="h-center">Live Google Street View</div>
+  <a href="/index.html#hero" class="back-btn">← Back to Home</a>
+</div>
+
+<div id="info-card">
+  <div class="ic-label">Now Viewing</div>
+  <div class="ic-name" id="ic-name">Main Campus Entrance</div>
+  <div class="ic-desc" id="ic-desc">Bull Temple Road, Basavanagudi, Bengaluru — 560019. The iconic BMSCE gate since 1946.</div>
+  <div class="ic-tags" id="ic-tags">
+    <span class="ic-tag">Live Street View</span>
+    <span class="ic-tag">Google Maps</span>
+  </div>
+</div>
+
+<div id="dots">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+</div>
+
+<div id="note">Drag inside the map to look around · Scroll to zoom</div>
+
+<div id="loc-strip">
+  <button class="loc-btn active" onclick="goTo(0)">Main Gate</button>
+  <button class="loc-btn" onclick="goTo(1)">Inside Campus</button>
+  <button class="loc-btn" onclick="goTo(2)">Library Block</button>
+  <button class="loc-btn" onclick="goTo(3)">Dept. Buildings</button>
+  <button class="loc-btn" onclick="goTo(4)">Campus Road</button>
+</div>
+
+<script>
+const locations = [
+  {
+    name: "Main Campus Entrance",
+    desc: "Bull Temple Road, Basavanagudi — The iconic BMSCE main gate, a landmark since 1946.",
+    tags: ["Main Gate", "Est. 1946", "Basavanagudi"],
+    src: "https://www.google.com/maps/embed?pb=!4v1710000000001!6m8!1m7!1sCAoSLEFGMVFpcE9oNzRfTVVBX3JsWEtqNERIMGY0eWJBTWVNWEVhU2ZyMlBxRVJh!2m2!1d12.9408!2d77.5634!3f180!4f0!5f0.7820865974627469"
+  },
+  {
+    name: "Inside Campus",
+    desc: "The lush green campus interior with academic blocks, pathways and open courtyards.",
+    tags: ["Green Campus", "Academic Blocks", "NAAC A+"],
+    src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d971.2!2d77.5630!3d12.9406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15c26f8b6b3d%3A0x9a63b5d88dfea40f!2sBMS%20College%20of%20Engineering!5e1!3m2!1sen!2sin!4v1710000000002"
+  },
+  {
+    name: "Library Block",
+    desc: "The central library with over 80,000 volumes, journals and digital resources for 8000+ students.",
+    tags: ["80K+ Books", "Digital Resources", "Study Halls"],
+    src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d485!2d77.5628!3d12.9407!2m3!1f0!2f30!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15c26f8b6b3d%3A0x9a63b5d88dfea40f!2sBMS%20College%20of%20Engineering!5e1!3m2!1sen!2sin!4v1710000000003"
+  },
+  {
+    name: "Department Buildings",
+    desc: "CSE, ECE, Mechanical and Civil department blocks equipped with modern labs and research centres.",
+    tags: ["12 Departments", "Modern Labs", "Research Centres"],
+    src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d971!2d77.5632!3d12.9404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15c26f8b6b3d%3A0x9a63b5d88dfea40f!2sBMS%20College%20of%20Engineering!5e1!3m2!1sen!2sin!4v1710000000004"
+  },
+  {
+    name: "Campus Road",
+    desc: "The main internal road connecting all blocks — from main gate to the sports ground and hostel area.",
+    tags: ["Campus Layout", "Sports Ground", "Hostels Nearby"],
+    src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1942!2d77.5631!3d12.9406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15c26f8b6b3d%3A0x9a63b5d88dfea40f!2sBMS%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1710000000005"
+  }
+];
+
+let current = 0;
+
+function goTo(index) {
+  current = index;
+  const loc = locations[index];
+
+  const frame = document.getElementById('map-frame');
+  frame.classList.add('loading');
+  document.getElementById('loader').classList.remove('hidden');
+  frame.src = loc.src;
+
+  document.getElementById('ic-name').textContent = loc.name;
+  document.getElementById('ic-desc').textContent = loc.desc;
+  document.getElementById('ic-tags').innerHTML = loc.tags.map((t) => `<span class="ic-tag">${t}</span>`).join('');
+
+  document.querySelectorAll('.loc-btn').forEach((b, i) => b.classList.toggle('active', i === index));
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === index));
+}
+
+document.getElementById('map-frame').addEventListener('load', () => {
+  document.getElementById('map-frame').classList.remove('loading');
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 400);
+});
+
+setTimeout(() => {
+  document.getElementById('note').classList.add('hidden');
+}, 5000);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' && current < locations.length - 1) goTo(current + 1);
+  if (e.key === 'ArrowLeft' && current > 0) goTo(current - 1);
+});
+</script>
+<script src="/assets/js/chatbot.js"></script>
+</body>
+</html>
