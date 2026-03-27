@@ -1,0 +1,44 @@
+<nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-4 text-white border-b border-transparent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-12">
+            <!-- Logo -->
+            <a href="/index.html#hero" class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                <img src="/assets/logo/logo.jpeg" alt="BMSCE Logo" class="w-10 h-10 object-contain" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" />
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-navy font-bold text-xl border-2 border-gold shadow-lg hidden">B</div>
+                <span class="font-bold text-xl md:text-2xl tracking-tight" id="nav-brand">BMSCE</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex space-x-5 xl:space-x-6 items-center">
+                <a href="/index.html#hero" class="hover:text-gold transition-colors font-medium text-sm">Home</a>
+                <a href="/index.html#vision-mission" class="hover:text-gold transition-colors font-medium text-sm">About</a>
+                <a href="/index.html#departments" class="hover:text-gold transition-colors font-medium text-sm">Departments</a>
+                <a href="/placements.html" class="hover:text-gold transition-colors font-medium text-sm">Placements</a>
+                <a href="/index.html#testimonials" class="hover:text-gold transition-colors font-medium text-sm">Testimonials</a>
+                <a href="/index.html#news-events" class="hover:text-gold transition-colors font-medium text-sm">News</a>
+                <a href="/index.html#footer" class="hover:text-gold transition-colors font-medium text-sm">Contact</a>
+
+                <a href="/index.html#footer" class="bg-gold text-navy px-6 py-2.5 rounded-full font-bold text-sm hover:bg-yellow-400 hover:shadow-lg hover:shadow-gold/30 transition-all transform hover:-translate-y-0.5 whitespace-nowrap">Apply Now</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="lg:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-white hover:text-gold focus:outline-none">
+                    <i class="ph ph-list text-3xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-xl py-4 flex flex-col items-center space-y-3 text-navy font-medium max-h-[80vh] overflow-y-auto">
+        <a href="/index.html#hero" class="hover:text-gold w-full text-center py-2">Home</a>
+        <a href="/index.html#vision-mission" class="hover:text-gold w-full text-center py-2">About</a>
+        <a href="/index.html#departments" class="hover:text-gold w-full text-center py-2">Departments</a>
+        <a href="/placements.html" class="hover:text-gold w-full text-center py-2">Placements</a>
+        <a href="/index.html#testimonials" class="hover:text-gold w-full text-center py-2">Testimonials</a>
+        <a href="/index.html#news-events" class="hover:text-gold w-full text-center py-2">News</a>
+        <a href="/index.html#footer" class="hover:text-gold w-full text-center py-2">Contact</a>
+        <a href="/index.html#footer" class="bg-gold text-navy px-8 py-3 rounded-full font-bold mt-2">Apply Now</a>
+    </div>
+</nav>

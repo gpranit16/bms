@@ -1,0 +1,97 @@
+body { font-family: 'Poppins', sans-serif; background-color: #f8f7f4; color: #1e1e1e; }
+
+:root {
+    --ink: #0f172a;
+    --soft-border: rgba(15, 23, 42, 0.08);
+}
+
+.glass-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-bg {
+    background-image: linear-gradient(rgba(26, 43, 94, 0.7), rgba(26, 43, 94, 0.8)), url('/assets/hero/hero1.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.pro-card {
+    border: 1px solid var(--soft-border);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.pro-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(201, 168, 76, 0.45);
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.14);
+}
+
+main > div {
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .hero-bg {
+        background-attachment: scroll;
+    }
+}
+
+.placement-shell {
+    background: #f4f4f4;
+}
+
+.placement-hero-card {
+    background: linear-gradient(160deg, #112b66 0%, #0b1f4a 100%);
+    border: 2px solid #0a1a3a;
+    box-shadow: 0 14px 30px rgba(10, 26, 58, 0.28);
+}
+
+.placement-kpi {
+    border: 1px solid rgba(15, 23, 42, 0.18);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.recruiter-tile {
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    background: #fff;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #223463;
+}
+
+.journey-step {
+    position: relative;
+    padding-left: 3.5rem;
+}
+
+.journey-step::before {
+    content: attr(data-step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.25rem;
+    background: #c9a84c;
+    color: #0f1f49;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+}
+
+.journey-step:not(:last-child) {
+    border-left: 2px dashed rgba(201, 168, 76, 0.7);
+    margin-left: 1rem;
+    padding-bottom: 1.25rem;
+}
