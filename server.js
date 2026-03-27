@@ -1,8 +1,9 @@
-require('dotenv').config();
-const express = require('express');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 5501;
@@ -14,6 +15,7 @@ app.use(express.static(path.join(__dirname)));
 const mongoUri = process.env.MONGODB_URI;
 
 let ChatLog;
+let Contact;
 
 async function connectMongo() {
     if (!mongoUri) {
@@ -31,11 +33,26 @@ async function connectMongo() {
             },
             { timestamps: true }
         );
+
+        const contactSchema = new mongoose.Schema(
+            {
+                name: { type: String, required: true, trim: true },
+                email: { type: String, required: true, trim: true, lowercase: true },
+                message: { type: String, required: true, trim: true }
+            },
+            { timestamps: true, collection: 'contacts' }
+        );
+
         ChatLog = mongoose.models.ChatLog || mongoose.model('ChatLog', chatSchema);
+        Contact = mongoose.models.Contact || mongoose.model('Contact', contactSchema);
         console.log('MongoDB connected successfully.');
     } catch (error) {
         console.error('MongoDB connection failed:', error.message);
     }
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 const systemPrompt = `You are BMSCE Assistant for B.M.S. College of Engineering, Bengaluru.
@@ -102,6 +119,67 @@ app.post('/api/chat', async (req, res) => {
         return res.json({ reply });
     } catch (error) {
         return res.status(500).json({ error: error.message || 'Unexpected server error' });
+    }
+});
+
+app.post('/api/contact', async (req, res) => {
+    const name = req.body?.name?.trim();
+    const email = req.body?.email?.trim();
+    const message = req.body?.message?.trim();
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ error: 'Name, email, and message are required.' });
+    }
+
+    if (!isValidEmail(email)) {
+        return res.status(400).json({ error: 'Please enter a valid email address.' });
+    }
+
+    if (!Contact) {
+        return res.status(500).json({ error: 'Database is not connected. Please try again later.' });
+    }
+
+    try {
+        await Contact.create({ name, email, message });
+
+        const emailUser = process.env.EMAIL_USER;
+        const emailPass = process.env.EMAIL_PASS;
+
+        if (!emailUser || !emailPass) {
+            return res.status(500).json({ error: 'EMAIL_USER or EMAIL_PASS missing in environment.' });
+        }
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: emailUser,
+                pass: emailPass
+            }
+        });
+
+        await transporter.sendMail({
+            from: `BMSCE Website <${emailUser}>`,
+            to: emailUser,
+            subject: 'New Contact Form Submission',
+            html: `
+                <h2>New Contact Form Submission</h2>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message.replace(/\n/g, '<br/>')}</p>
+            `
+        });
+
+        await transporter.sendMail({
+            from: `BMSCE Admissions <${emailUser}>`,
+            to: email,
+            subject: 'Thanks for contacting us',
+            text: `Hi ${name},\n\nWe received your query and will contact you soon.\n\nRegards,\nBMSCE Team`
+        });
+
+        return res.status(200).json({ success: true, message: 'Your message was submitted successfully.' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message || 'Unable to process contact request.' });
     }
 });
 

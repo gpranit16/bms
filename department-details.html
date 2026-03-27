@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Details - BMSCE</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
+        .bg-navy { background-color: #0A192F; }
+        .text-navy { color: #0A192F; }
+        .bg-gold { background-color: #D4AF37; }
+        .text-gold { color: #D4AF37; }
+        .border-gold { border-color: #D4AF37; }
+        .hover\:bg-gold:hover { background-color: #D4AF37; }
+        .hover\:text-gold:hover { color: #D4AF37; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        #dept-sidebar .active {
+            background-color: #f8fafc;
+            border-left: 4px solid #D4AF37;
+            color: #0A192F;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased selection:bg-gold selection:text-white flex flex-col min-h-screen">
+
+    <!-- Simple Navbar -->
+    <nav class="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="/index.html" class="flex items-center gap-3 cursor-pointer">
+                    <img src="/assets/logo/logo.jpeg" alt="BMSCE Logo" class="w-12 h-12 object-contain" />
+                    <div class="flex flex-col">
+                        <span class="font-bold text-xl md:text-2xl tracking-tight text-navy font-serif">BMSCE</span>
+                    </div>
+                </a>
+                <a href="/index.html#departments" class="text-sm font-semibold text-gray-600 hover:text-gold transition-colors flex items-center gap-2">
+                    <i class="ph ph-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="bg-navy text-white relative py-16 md:py-24 overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-20">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/></pattern></defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4" data-aos="fade-up">Academic Departments</h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Explore the comprehensive disciplines shaping the innovators of tomorrow at BMSCE.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full flex flex-col lg:flex-row gap-8">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-1/4 flex flex-col gap-6" data-aos="fade-right">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto hidden lg:flex flex-col">
+                <h3 class="text-xs uppercase tracking-widest font-bold text-gray-400 mb-4 px-4">All Departments</h3>
+                <nav id="dept-sidebar" class="flex flex-col space-y-1">
+                    <!-- sidebar links injected here via JS -->
+                </nav>
+            </div>
+            
+            <!-- Mobile Select -->
+            <div class="lg:hidden bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <label for="mobile-dept-select" class="block text-sm font-semibold text-gray-700 mb-2">Select Department</label>
+                <div class="relative">
+                    <select id="mobile-dept-select" class="block w-full appearance-none bg-gray-50 border border-gray-200 text-navy py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gold focus:ring-1 focus:ring-gold font-medium">
+                        <!-- options injected here via JS -->
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                        <i class="ph ph-caret-down"></i>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Department Details area -->
+        <article class="w-full lg:w-3/4 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" data-aos="fade-left">
+            <div id="dept-content-area" class="opacity-0 transition-opacity duration-500">
+                <div class="p-8 md:p-12 border-b border-gray-100 relative">
+                    <div class="absolute top-8 right-8 text-6xl text-gray-100" id="dept-bg-icon">
+                        <i class="ph-fill ph-buildings"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-3 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-gold/10 text-gold flex items-center justify-center text-xl">
+                            <i id="dept-icon" class="ph-fill ph-buildings"></i>
+                        </div>
+                        <h2 id="dept-title" class="text-3xl md:text-4xl font-bold text-navy">Loading...</h2>
+                    </div>
+                    
+                    <div class="mt-8 bg-gray-50 rounded-xl p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 border border-gray-100 relative z-10">
+                        <div class="w-16 h-16 rounded-full bg-navy flex items-center justify-center text-white text-2xl flex-shrink-0 shadow-md">
+                            <i class="ph ph-user-circle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gold tracking-wide uppercase mb-1" id="hod-title">Professor & Head</p>
+                            <h3 class="text-xl font-bold text-navy" id="hod-name">Dr. Name</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8 md:p-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <!-- About Section -->
+                        <div class="col-span-1 md:col-span-2 space-y-4">
+                            <h4 class="text-2xl font-bold text-navy flex items-center gap-2 border-b border-gray-100 pb-2">
+                                <i class="ph-fill ph-info text-gold"></i> About the Department
+                            </h4>
+                            <div id="dept-about" class="text-gray-600 leading-relaxed space-y-4 text-justify">
+                                <!-- Content -->
+                            </div>
+                        </div>
+
+                        <!-- Profile/Strengths -->
+                        <div class="col-span-1 md:col-span-2 mt-4">
+                            <h4 class="text-2xl font-bold text-navy flex items-center gap-2 border-b border-gray-100 pb-2 mb-4">
+                                <i class="ph-fill ph-star text-gold"></i> Department Profile & Strengths
+                            </h4>
+                            <div id="dept-profile" class="bg-gray-50 rounded-xl p-6 md:p-8 text-gray-600 leading-relaxed border border-gray-100">
+                                <!-- Content -->
+                            </div>
+                        </div>
+
+                        <!-- Vision -->
+                        <div class="col-span-1 border border-gray-100 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-gold/10 rounded-full transition-transform group-hover:scale-[2.5]"></div>
+                            <h4 class="text-xl font-bold text-navy flex items-center gap-2 mb-3 relative z-10">
+                                <i class="ph-fill ph-eye text-gold"></i> Vision
+                            </h4>
+                            <div id="dept-vision" class="text-gray-600 italic relative z-10">
+                                <!-- Content -->
+                            </div>
+                        </div>
+
+                        <!-- Mission -->
+                        <div class="col-span-1 border border-gray-100 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-navy/5 rounded-full transition-transform group-hover:scale-[2.5]"></div>
+                            <h4 class="text-xl font-bold text-navy flex items-center gap-2 mb-3 relative z-10">
+                                <i class="ph-fill ph-target text-gold"></i> Mission
+                            </h4>
+                            <div id="dept-mission" class="text-gray-600 relative z-10">
+                                <!-- Content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer Simple -->
+    <footer class="bg-navy text-white text-center py-6 border-t border-white/10 mt-auto">
+        <p class="text-sm text-gray-400">© 2026 BMS College of Engineering. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="/assets/js/departments-data-1.js"></script>
+    <script src="/assets/js/departments-data-2.js"></script>
+    <script src="/assets/js/department-details.js"></script>
+</body>
+</html>

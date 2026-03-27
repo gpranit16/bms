@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - BMSCE</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#1a2b5e',
+                        gold: '#c9a84c',
+                        offwhite: '#f8f7f4',
+                        charcoal: '#1e1e1e'
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body class="antialiased overflow-x-hidden force-solid-nav bg-offwhite">
+    <div id="navbar-container"></div>
+
+    <main class="pt-28 pb-20 px-4">
+        <section class="max-w-4xl mx-auto" data-aos="fade-up">
+            <div class="bg-gradient-to-r from-navy to-[#223975] rounded-3xl p-8 md:p-10 text-white shadow-xl">
+                <p class="text-xs uppercase tracking-[0.2em] text-gold font-semibold">Get in Touch</p>
+                <h1 class="text-3xl md:text-5xl font-extrabold mt-2">Contact BMSCE</h1>
+                <p class="mt-4 text-gray-200 text-sm md:text-base">Have a question regarding admissions, academics, departments, placements, or campus life? Send us your message and our team will respond soon.</p>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto mt-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="pro-card bg-white rounded-2xl p-6 md:p-8 border border-slate-200">
+                <form id="contact-form" class="space-y-5">
+                    <div>
+                        <label for="name" class="block text-sm font-semibold text-navy mb-2">Name</label>
+                        <input id="name" name="name" type="text" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy" placeholder="Enter your full name" />
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-navy mb-2">Email</label>
+                        <input id="email" name="email" type="email" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy" placeholder="Enter your email address" />
+                    </div>
+
+                    <div>
+                        <label for="message" class="block text-sm font-semibold text-navy mb-2">Message</label>
+                        <textarea id="message" name="message" rows="6" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy resize-y" placeholder="Type your query here..."></textarea>
+                    </div>
+
+                    <div id="contact-alert" class="hidden rounded-xl px-4 py-3 text-sm font-medium"></div>
+
+                    <button id="contact-submit" type="submit" class="inline-flex items-center justify-center gap-2 bg-gold text-navy px-8 py-3 rounded-full font-bold text-sm hover:bg-yellow-400 transition-all">
+                        <i class="ph ph-paper-plane-tilt"></i>
+                        Submit Message
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="/assets/js/components.js"></script>
+    <script src="/assets/js/contact.js"></script>
+    <script src="/assets/js/chatbot.js"></script>
+</body>
+</html>
